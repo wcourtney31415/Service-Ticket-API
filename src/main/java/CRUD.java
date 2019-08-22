@@ -17,8 +17,17 @@ public class CRUD {
 		document.put("phoneNumber", "5551235542");
 		collection.insert(document);
 	}
-
-	public static List<DBObject> read(DBCollection collection, BasicDBObject query) {
+	
+	public static List<DBObject> read(DBCollection collection) {
+		DBCursor cursor = collection.find();
+		List<DBObject> dbObjects = new ArrayList<DBObject>();
+		while (cursor.hasNext()) {
+			dbObjects.add(cursor.next());
+		}
+		return dbObjects;
+	}
+	
+	public static List<DBObject> readWhere(DBCollection collection, BasicDBObject query) {
 		DBCursor cursor = collection.find(query);
 		List<DBObject> dbObjects = new ArrayList<DBObject>();
 		while (cursor.hasNext()) {
