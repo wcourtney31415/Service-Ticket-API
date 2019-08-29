@@ -18,16 +18,9 @@ public class CRUD {
 		collection.insert(document);
 	}
 	
-	public static List<DBObject> read(DBCollection collection) {
-		DBCursor cursor = collection.find();
-		List<DBObject> dbObjects = new ArrayList<DBObject>();
-		while (cursor.hasNext()) {
-			dbObjects.add(cursor.next());
-		}
-		return dbObjects;
-	}
-	
-	public static List<DBObject> readWhere(DBCollection collection, BasicDBObject query) {
+	//Eventually We'll need securty for Object parameters. 
+	//Currently the query can access each property of the specified object.
+	public static List<DBObject> read(DBCollection collection, BasicDBObject query) {
 		DBCursor cursor = collection.find(query);
 		List<DBObject> dbObjects = new ArrayList<DBObject>();
 		while (cursor.hasNext()) {

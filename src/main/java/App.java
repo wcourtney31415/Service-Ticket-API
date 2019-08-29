@@ -3,11 +3,13 @@ import static spark.Spark.get;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
+import com.mongodb.util.JSON;
 
 import spark.Spark;
 
@@ -21,7 +23,9 @@ public class App {
 		get("/ticket", (req, res) -> {
 			res.type("application/json");
 			DBCollection collection = database.getCollection("Ticket");
-			List<DBObject> tickets = CRUD.read(collection);
+			String body = req.body();
+			BasicDBObject query = (BasicDBObject) JSON.parse(body);
+			List<DBObject> tickets = CRUD.read(collection, query);
 			String json = tickets.toString();
 			return json;
 		});
