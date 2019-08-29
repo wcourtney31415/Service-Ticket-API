@@ -1,9 +1,11 @@
 import static spark.Spark.get;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 
@@ -14,14 +16,20 @@ public class App {
 	private static DB database;
 
 	public static void main(String[] args) {
-		setupServer();
+		setupAPI();
 		
 		get("/ticket", (req, res) -> {
 			res.type("application/json");
 			DBCollection collection = database.getCollection("Ticket");
-			String json = CRUD.read(collection).toString();
+			List<DBObject> tickets = CRUD.read(collection);
+			String json = tickets.toString();
 			return json;
 		});
+	}
+
+	private static void setupAPI() {
+		setupSpark(80);
+		setupMongoClient("localhost", 27017, "ServiceTickets");
 	}
 
 	private static void setupSpark(int port) {
@@ -41,8 +49,4 @@ public class App {
 		}
 	}
 
-	private static void setupServer() {
-		setupSpark(80);
-		setupMongoClient("localhost", 27017, "ServiceTickets");
-	}
 }
