@@ -18,9 +18,11 @@ public class CRUD {
 		collection.insert(document);
 	}
 	
-	//Eventually We'll need securty for Object parameters. 
-	//Currently the query can access each property of the specified object.
+	//Began adding a Property santizer for this, but noticed that if i provide a JSON object like:
+	//{"sdfsd":"sdaga"} into the body of the request, that my read method spits out all of the tickets
+	//This needs addressed.
 	public static List<DBObject> read(DBCollection collection, BasicDBObject query) {
+		query = PropertySanitizer.sterilizeTicket(query);
 		DBCursor cursor = collection.find(query);
 		List<DBObject> dbObjects = new ArrayList<DBObject>();
 		while (cursor.hasNext()) {
@@ -28,13 +30,13 @@ public class CRUD {
 		}
 		return dbObjects;
 	}
-
+	
 	public static void update(DBCollection collection, BasicDBObject query, BasicDBObject updates) {
 		BasicDBObject updateObj = new BasicDBObject();
 		updateObj.put("$set", updates);
 		collection.updateMulti(query, updateObj);
 	}
-
+	
 	public static void delete(DBCollection collection, BasicDBObject query) {
 		collection.remove(query);
 	}
