@@ -24,7 +24,9 @@ public class CRUD {
 	// all of the tickets
 	// This needs addressed.
 	public static List<DBObject> read(DBCollection collection, BasicDBObject query) {
-		query = JSONObjectSanitizer.sanitizeTicket(query);
+		String[] safeKeys = { "firstName", "lastName", "dateIn", "passwordBox", "description", "inventoryItems",
+				"phoneNumber" };
+		query = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
 		DBCursor cursor = collection.find(query);
 		List<DBObject> dbObjects = new ArrayList<DBObject>();
 		while (cursor.hasNext()) {
