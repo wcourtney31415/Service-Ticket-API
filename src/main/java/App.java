@@ -19,7 +19,7 @@ public class App {
 
 	public static void main(String[] args) {
 		setupAPI();
-		
+
 		get("/ticket", (req, res) -> {
 			res.type("application/json");
 			DBCollection collection = database.getCollection("Ticket");
