@@ -24,10 +24,15 @@ public class App {
 			res.type("application/json");
 			DBCollection collection = database.getCollection("Ticket");
 			String body = req.body();
-			BasicDBObject query = (BasicDBObject) JSON.parse(body);
-			List<DBObject> tickets = CRUD.read(collection, query);
-			String json = tickets.toString();
-			return json;
+			String myResponse;
+			try {
+				BasicDBObject query = (BasicDBObject) JSON.parse(body);
+				List<DBObject> tickets = CRUD.read(collection, query);
+				myResponse = tickets.toString();
+			} catch (Exception e) {
+				myResponse = "JSON in the body of your request couldn't be processed. :(";
+			}
+			return myResponse;
 		});
 	}
 
