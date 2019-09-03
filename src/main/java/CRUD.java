@@ -23,15 +23,11 @@ public class CRUD {
 	// {"sdfsd":"sdaga"} into the body of the request, that my read method spits out
 	// all of the tickets
 	// This needs addressed.
+	
 	public static List<DBObject> read(DBCollection collection, BasicDBObject query) {
-		String[] safeKeys = { "firstName", "lastName", "dateIn", "passwordBox", "description", "inventoryItems",
-				"phoneNumber" };
+		String[] safeKeys = { "firstName", "lastName", "dateIn", "passwordBox", "description", "inventoryItems", "phoneNumber" };
 		query = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
-		DBCursor cursor = collection.find(query);
-		List<DBObject> dbObjects = new ArrayList<DBObject>();
-		while (cursor.hasNext()) {
-			dbObjects.add(cursor.next());
-		}
+		List<DBObject> dbObjects = find(collection, query);
 		return dbObjects;
 	}
 
@@ -43,6 +39,15 @@ public class CRUD {
 
 	public static void delete(DBCollection collection, BasicDBObject query) {
 		collection.remove(query);
+	}
+
+	private static List<DBObject> find(DBCollection collection, BasicDBObject query) {
+		DBCursor cursor = collection.find(query);
+		List<DBObject> dbObjects = new ArrayList<DBObject>();
+		while (cursor.hasNext()) {
+			dbObjects.add(cursor.next());
+		}
+		return dbObjects;
 	}
 
 }
