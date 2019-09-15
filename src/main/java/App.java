@@ -36,6 +36,22 @@ public class App {
 			}
 			return myResponse;
 		});
+		
+		get("/client", (req, res) -> {
+			res.type("application/json");
+			DBCollection collection = database.getCollection("Client");
+			Map<String, String> queryParams = queryParamsToMap(req);
+			BasicDBObject query = new BasicDBObject(queryParams);
+			String myResponse;
+			try {
+				List<DBObject> tickets = CRUD.read(collection, query);
+				myResponse = tickets.toString();
+			} catch (Exception e) {
+				myResponse = "Request Failed :(";
+			}
+			return myResponse;
+		});
+		
 	}
 
 	public static Map<String, String> queryParamsToMap(Request request) {
