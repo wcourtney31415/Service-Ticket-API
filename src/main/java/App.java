@@ -1,7 +1,9 @@
 import static spark.Spark.get;
 
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -9,8 +11,8 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
-import com.mongodb.util.JSON;
 
+import spark.Request;
 import spark.Spark;
 
 public class App {
@@ -23,17 +25,26 @@ public class App {
 		get("/ticket", (req, res) -> {
 			res.type("application/json");
 			DBCollection collection = database.getCollection("Ticket");
-			String body = req.body();
+			Map<String, String> queryParams = queryParamsToMap(req);
+			BasicDBObject query = new BasicDBObject(queryParams);
 			String myResponse;
 			try {
-				BasicDBObject query = (BasicDBObject) JSON.parse(body);
 				List<DBObject> tickets = CRUD.read(collection, query);
 				myResponse = tickets.toString();
 			} catch (Exception e) {
-				myResponse = "JSON in the body of your request couldn't be processed. :(";
+				myResponse = "Request Failed :(";
 			}
 			return myResponse;
 		});
+	}
+
+	public static Map<String, String> queryParamsToMap(Request request) {
+		Map<String, String> map = new HashMap<String, String>();
+		request.queryParams().forEach(key -> {
+			String value = request.queryParamsValues(key)[0];
+			map.put(key, value);
+		});
+		return map;
 	}
 
 	private static void setupAPI() {
