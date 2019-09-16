@@ -22,11 +22,13 @@ public class App {
 	public static void main(String[] args) {
 		setupAPI();
 
-		get("/ticket", (req, res) -> {
-			res.type("application/json");
+		get("/ticket", (request, response) -> {
+			response.type("application/json");
 			DBCollection collection = database.getCollection("Ticket");
-			Map<String, String> queryParams = queryParamsToMap(req);
+			Map<String, String> queryParams = queryParamsToMap(request);
 			BasicDBObject query = new BasicDBObject(queryParams);
+			String[] safeKeys = {"dateIn"};
+			query = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
 			String myResponse;
 			try {
 				List<DBObject> tickets = CRUD.read(collection, query);
@@ -36,12 +38,14 @@ public class App {
 			}
 			return myResponse;
 		});
-		
-		get("/client", (req, res) -> {
-			res.type("application/json");
+
+		get("/client", (request, response) -> {
+			response.type("application/json");
 			DBCollection collection = database.getCollection("Client");
-			Map<String, String> queryParams = queryParamsToMap(req);
+			Map<String, String> queryParams = queryParamsToMap(request);
 			BasicDBObject query = new BasicDBObject(queryParams);
+			String[] safeKeys = {"firstName",  "phoneNumber"};
+			query = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
 			String myResponse;
 			try {
 				List<DBObject> tickets = CRUD.read(collection, query);
@@ -51,7 +55,7 @@ public class App {
 			}
 			return myResponse;
 		});
-		
+
 	}
 
 	public static Map<String, String> queryParamsToMap(Request request) {

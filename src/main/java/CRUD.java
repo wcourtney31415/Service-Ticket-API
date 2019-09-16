@@ -25,8 +25,6 @@ public class CRUD {
 	// This needs addressed.
 	
 	public static List<DBObject> read(DBCollection collection, BasicDBObject query) {
-		String[] safeKeys = { "firstName", "lastName", "dateIn", "passwordBox", "description", "inventoryItems", "phoneNumber" };
-		query = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
 		List<DBObject> dbObjects = find(collection, query);
 		return dbObjects;
 	}
