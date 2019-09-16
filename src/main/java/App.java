@@ -26,13 +26,9 @@ public class App {
 			response.type("application/json");
 			DBCollection collection = database.getCollection("Ticket");
 			Map<String, String> queryParams = queryParamsToMap(request);
-			System.out.println("queryParams: " + queryParams);
 			BasicDBObject query = new BasicDBObject(queryParams);
-			System.out.println("query: " + query);
 			String[] safeKeys = { "dateIn" };
 			JSONObjectSanitizer.SanitaryObject safeQuery = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
-			System.out.println("safeQuery: "+safeQuery.toString());
-			System.out.println("retrieve: " + safeQuery.retrieve());
 			String myResponse;
 			try {
 				List<DBObject> tickets = CRUD.read(collection, safeQuery);
@@ -47,13 +43,9 @@ public class App {
 			response.type("appl	ication/json");
 			DBCollection collection = database.getCollection("Client");
 			Map<String, String> queryParams = queryParamsToMap(request);
-			System.out.println("queryParams: " + queryParams);
 			BasicDBObject query = new BasicDBObject(queryParams);
-			System.out.println("query: " + query);
 			String[] safeKeys = { "firstName", "lastName", "phoneNumber" };
 			JSONObjectSanitizer.SanitaryObject safeQuery = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
-			System.out.println("safeQuery: "+safeQuery.toString());
-			System.out.println("retrieve: " + safeQuery.retrieve());
 			String myResponse;
 			try {
 				List<DBObject> tickets = CRUD.read(collection, safeQuery);
