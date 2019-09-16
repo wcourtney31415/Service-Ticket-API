@@ -26,12 +26,16 @@ public class App {
 			response.type("application/json");
 			DBCollection collection = database.getCollection("Ticket");
 			Map<String, String> queryParams = queryParamsToMap(request);
+			System.out.println("queryParams: " + queryParams);
 			BasicDBObject query = new BasicDBObject(queryParams);
-			String[] safeKeys = {"dateIn"};
-			query = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
+			System.out.println("query: " + query);
+			String[] safeKeys = { "dateIn" };
+			JSONObjectSanitizer.SanitaryObject safeQuery = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
+			System.out.println("safeQuery: "+safeQuery.toString());
+			System.out.println("retrieve: " + safeQuery.retrieve());
 			String myResponse;
 			try {
-				List<DBObject> tickets = CRUD.read(collection, query);
+				List<DBObject> tickets = CRUD.read(collection, safeQuery);
 				myResponse = tickets.toString();
 			} catch (Exception e) {
 				myResponse = "Request Failed :(";
@@ -40,15 +44,19 @@ public class App {
 		});
 
 		get("/client", (request, response) -> {
-			response.type("application/json");
+			response.type("appl	ication/json");
 			DBCollection collection = database.getCollection("Client");
 			Map<String, String> queryParams = queryParamsToMap(request);
+			System.out.println("queryParams: " + queryParams);
 			BasicDBObject query = new BasicDBObject(queryParams);
-			String[] safeKeys = {"firstName",  "phoneNumber"};
-			query = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
+			System.out.println("query: " + query);
+			String[] safeKeys = { "firstName", "lastName", "phoneNumber" };
+			JSONObjectSanitizer.SanitaryObject safeQuery = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
+			System.out.println("safeQuery: "+safeQuery.toString());
+			System.out.println("retrieve: " + safeQuery.retrieve());
 			String myResponse;
 			try {
-				List<DBObject> tickets = CRUD.read(collection, query);
+				List<DBObject> tickets = CRUD.read(collection, safeQuery);
 				myResponse = tickets.toString();
 			} catch (Exception e) {
 				myResponse = "Request Failed :(";

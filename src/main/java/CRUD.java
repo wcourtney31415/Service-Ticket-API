@@ -23,9 +23,11 @@ public class CRUD {
 	// {"sdfsd":"sdaga"} into the body of the request, that my read method spits out
 	// all of the tickets
 	// This needs addressed.
-	
-	public static List<DBObject> read(DBCollection collection, BasicDBObject query) {
-		List<DBObject> dbObjects = find(collection, query);
+
+	public static List<DBObject> read(DBCollection collection, JSONObjectSanitizer.SanitaryObject query) {
+		BasicDBObject safeQuery = query.retrieve();
+
+		List<DBObject> dbObjects = find(collection, safeQuery);
 		return dbObjects;
 	}
 
