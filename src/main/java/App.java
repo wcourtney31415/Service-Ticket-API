@@ -1,4 +1,5 @@
 import static spark.Spark.get;
+import static spark.Spark.post;
 
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class App {
 
 	public static void main(String[] args) {
 		setupAPI();
-
+		
 		get("/ticket", (request, response) -> {
 			response.type("application/json");
 			DBCollection collection = database.getCollection("Ticket");
@@ -55,7 +56,11 @@ public class App {
 			}
 			return myResponse;
 		});
-
+		
+		post("/client", (request, response) -> {
+			return "";
+		});
+		
 	}
 
 	public static Map<String, String> queryParamsToMap(Request request) {
