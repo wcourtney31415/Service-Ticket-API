@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bson.types.ObjectId;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -58,7 +60,10 @@ public class App {
 		});
 		
 		post("/client", (request, response) -> {
-			return "";
+			DBCollection collection = database.getCollection("Client");
+			String json = request.body();
+			  ObjectId objectId = CRUD.create(collection, json);
+			return objectId;
 		});
 		
 	}

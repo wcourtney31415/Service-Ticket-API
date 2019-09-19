@@ -1,21 +1,20 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 
 public class CRUD {
-	public static void create(DBCollection collection) {
-		BasicDBObject document = new BasicDBObject();
-		document.put("firstName", "Bob");
-		document.put("lastName", "Smith");
-		document.put("dateIn", "2019-04-05");
-		document.put("passwordBox", "#BestPasswordEver");
-		document.put("description", "won't boot");
-		document.put("phoneNumber", "5551235542");
+	public static ObjectId create(DBCollection collection, String json) {
+		BasicDBObject document = (BasicDBObject) JSON.parse(json);
 		collection.insert(document);
+		ObjectId id = (ObjectId)document.get( "_id" );
+		return id;
 	}
 
 	// Began adding a Property santizer for this, but noticed that if i provide a
