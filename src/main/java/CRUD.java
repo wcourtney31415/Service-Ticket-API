@@ -25,7 +25,6 @@ public class CRUD {
 
 	public static List<DBObject> read(DBCollection collection, JSONObjectSanitizer.SanitaryObject query) {
 		BasicDBObject safeQuery = query.retrieve();
-
 		List<DBObject> dbObjects = find(collection, safeQuery);
 		return dbObjects;
 	}

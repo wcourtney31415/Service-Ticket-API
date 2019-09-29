@@ -10,9 +10,9 @@ public class JSONObjectSanitizer {
 			}
 		}
 
-		SanitaryObject so = new SanitaryObject(safeObject);
+		SanitaryObject sanitizedObject = new SanitaryObject(safeObject);
 
-		return so;
+		return sanitizedObject;
 	}
 
 	static class SanitaryObject {

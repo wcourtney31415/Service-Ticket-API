@@ -43,11 +43,11 @@ public class App {
 		});
 
 		get("/client", (request, response) -> {
-			response.type("appl	ication/json");
+			response.type("application/json");
 			DBCollection collection = database.getCollection("Client");
 			Map<String, String> queryParams = queryParamsToMap(request);
 			BasicDBObject query = new BasicDBObject(queryParams);
-			String[] safeKeys = { "firstName", "lastName", "phoneNumber" };
+			String[] safeKeys = { "firstName", "lastName", "phoneNumber"};
 			JSONObjectSanitizer.SanitaryObject safeQuery = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
 			String myResponse;
 			try {
