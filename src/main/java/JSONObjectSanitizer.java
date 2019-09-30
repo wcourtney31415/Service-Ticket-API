@@ -1,18 +1,18 @@
+import java.util.List;
+import java.util.Set;
+
 import com.mongodb.BasicDBObject;
 
 public class JSONObjectSanitizer {
 
-	public static SanitaryObject sanitizeTicket(BasicDBObject unsafeObject, String[] safeKeys) {
-		BasicDBObject safeObject = new BasicDBObject();
-		for (String key : safeKeys) {
-			if (unsafeObject.get(key) != null) {
-				safeObject.put(key, unsafeObject.get(key));
+	public static SanitaryObject sanitizeTicket(BasicDBObject unsafeObject, List<String> safeKeys) throws Exception {
+		Set<String> fields = unsafeObject.keySet();
+		for (String field : fields) {
+			if (!safeKeys.contains(field)) {
+				throw new Exception(field + " is an invalid field.");
 			}
 		}
-
-		SanitaryObject sanitizedObject = new SanitaryObject(safeObject);
-
-		return sanitizedObject;
+		return new SanitaryObject(unsafeObject);
 	}
 
 	static class SanitaryObject {
@@ -25,11 +25,11 @@ public class JSONObjectSanitizer {
 		public BasicDBObject retrieve() {
 			return sanitaryObject;
 		}
-		
+
 		public String toString() {
 			return sanitaryObject.toString();
 		}
-		
+
 	}
 
 }

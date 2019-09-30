@@ -2,6 +2,7 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,20 +25,20 @@ public class App {
 
 	public static void main(String[] args) {
 		setupAPI();
-		
+
 		get("/ticket", (request, response) -> {
 			response.type("application/json");
 			DBCollection collection = database.getCollection("Ticket");
 			Map<String, String> queryParams = queryParamsToMap(request);
 			BasicDBObject query = new BasicDBObject(queryParams);
-			String[] safeKeys = { "dateIn" };
-			JSONObjectSanitizer.SanitaryObject safeQuery = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
+			List<String> safeKeys = Arrays.asList("dateIn");
 			String myResponse;
 			try {
+				JSONObjectSanitizer.SanitaryObject safeQuery = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
 				List<DBObject> tickets = CRUD.read(collection, safeQuery);
 				myResponse = tickets.toString();
-			} catch (Exception e) {
-				myResponse = "Request Failed :(";
+			}catch (Exception e) {
+				myResponse = e.getMessage();
 			}
 			return myResponse;
 		});
@@ -47,25 +48,25 @@ public class App {
 			DBCollection collection = database.getCollection("Client");
 			Map<String, String> queryParams = queryParamsToMap(request);
 			BasicDBObject query = new BasicDBObject(queryParams);
-			String[] safeKeys = { "firstName", "lastName", "phoneNumber"};
-			JSONObjectSanitizer.SanitaryObject safeQuery = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
+			List<String> safeKeys = Arrays.asList("firstName", "lastName", "phoneNumber");
 			String myResponse;
 			try {
+				JSONObjectSanitizer.SanitaryObject safeQuery = JSONObjectSanitizer.sanitizeTicket(query, safeKeys);
 				List<DBObject> tickets = CRUD.read(collection, safeQuery);
 				myResponse = tickets.toString();
 			} catch (Exception e) {
-				myResponse = "Request Failed :(";
+				myResponse = e.getMessage();
 			}
 			return myResponse;
 		});
-		
+
 		post("/client", (request, response) -> {
 			DBCollection collection = database.getCollection("Client");
 			String json = request.body();
-			  ObjectId objectId = CRUD.create(collection, json);
+			ObjectId objectId = CRUD.create(collection, json);
 			return objectId;
 		});
-		
+
 	}
 
 	public static Map<String, String> queryParamsToMap(Request request) {
